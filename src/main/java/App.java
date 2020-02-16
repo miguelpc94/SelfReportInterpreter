@@ -22,6 +22,11 @@ public class App {
             throw new Error("Could not read file: " + e.getMessage(), e);
         }
 
-        SelfReport report = new SelfReport(reader);
+        // TODO: There should be a SelfReportBuilder, that takes a reader for a report file and another for the interpreter config
+        // TODO: A instance of the interpreter is created and passed to the SelfReportParser's constructor, just as seen bellow
+        ReportInterpreter interpreter = new ReportInterpreter();
+        SelfReportParser selfReport = new SelfReportParser(reader, interpreter);
+        ReportTable reportTable = selfReport.generateReportTable();
+        // TODO: reportTable.writeToCsv ?
     }
 }
