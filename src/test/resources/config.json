@@ -1,0 +1,15 @@
+{
+  "year": 2020,
+  "months": {
+    "jn": 1,
+    "fb": 2
+  },
+  "activities": {
+    "work": [ "Career development", "Working at office" ],
+    "study": [ "Study", "Studying a new language" ],
+    "gym": [ "Imaginary", "Working out" ],
+    "med": [ "Mindfulness", "Meditation" ],
+    "reading": [ "Reading", "Reading a book" ],
+    "programming": [ "Programming", "Programming Java" ]
+  }
+}

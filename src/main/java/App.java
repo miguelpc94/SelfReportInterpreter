@@ -1,32 +1,43 @@
 import java.io.*;
+import java.util.List;
 
 public class App {
     static public void main(String[] args) throws IOException {
-        System.out.println("Reading self report...");
-        //SelfReport report = new SelfReport("")
-        String filePath;
+
+
+        String dataFilePath;
         try {
-            filePath = args[0];
+            dataFilePath = args[0];
         }
         catch(Exception e) {
             System.out.println("Give file path as an argument");
             throw new Error("No file given as argument");
         }
 
-        BufferedReader reader;
-        try {
-            File file = new File(filePath);
-            reader = new BufferedReader(new FileReader(file));
-        }
-        catch(Exception e) {
-            throw new Error("Could not read file: " + e.getMessage(), e);
-        }
-
-        // TODO: There should be a SelfReportBuilder, that takes a reader for a report file and another for the interpreter config
-        // TODO: A instance of the interpreter is created and passed to the SelfReportParser's constructor, just as seen bellow
-        ReportInterpreter interpreter = new ReportInterpreter();
-        SelfReportParser selfReport = new SelfReportParser(reader, interpreter);
-        ReportTable reportTable = selfReport.generateReportTable();
-        // TODO: reportTable.writeToCsv ?
+        runWithFiles(dataFilePath,"config.json", "output.csv");
     }
+
+    static public void runWithFiles(String dataFilePath, String configFilePath, String outputFilePath) throws IOException {
+        System.out.println("Reading self report...");
+
+        ReportInterpreter interpreter = new ReportInterpreter();
+        interpreter.withConfigurationFile(configFilePath);
+        SelfReportParser selfReport = new SelfReportParser(dataFilePath, interpreter);
+        List<InterpreterNotification> notifications = interpreter.getNotifications();
+
+        System.out.println("\nThe self report was read\n");
+        if (notifications.size()>0) {
+            System.out.println("Could not write output file due to the following notifications:\n");
+            for (InterpreterNotification notificaion : notifications) {
+                System.out.println(notificaion.toString()+"\n");
+            }
+        } else {
+            System.out.println("\nGenerating report table...\n");
+            ReportTable reportTable = selfReport.generateReportTable();
+            System.out.println("\nWriting report table to output file...\n");
+            reportTable.writeToFile(outputFilePath);
+            // TODO: reportTable.writeToCsv <========================================== 12 (11 done)
+        }
+    }
+
 }

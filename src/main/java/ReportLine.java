@@ -1,5 +1,3 @@
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ReportLine {
@@ -19,7 +17,7 @@ public class ReportLine {
 
     public ReportLineTypes getLineType() { return lineType; }
 
-    public String getRowContent(String columnName) { return rowContent.get(columnName); }
+    public String getRowContent(String columnName) { return rowContent == null ? null : rowContent.get(columnName); }
 
     private void populateRowContent() { rowContent = interpreter.interpretLine(rawLine, lineType); }
 }
